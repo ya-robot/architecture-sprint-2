@@ -5,7 +5,7 @@
 From root directory run:
 
 ```bash
-docker compose up -d
+docker compose -f ./mongodb-sharding/scripts/mongodb-sharding-init.sh up -d
 ```
 
 Run init script that setups:
