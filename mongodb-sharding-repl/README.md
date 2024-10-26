@@ -1,4 +1,4 @@
-# MongoDB with sharding
+# MongoDB with sharding and replication
 
 ## How to run
 
