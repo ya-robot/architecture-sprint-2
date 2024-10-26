@@ -6,7 +6,7 @@ services:
     ports:
       - "27017:27017"
     networks:
-      app-network:
+      intranet-mongo:
         ipv4_address: 173.17.0.10
     volumes:
       - config-data:/data/db
@@ -31,7 +31,7 @@ services:
     ports:
       - "27018:27018"
     networks:
-      app-network:
+      intranet-mongo:
         ipv4_address: 173.17.0.9
     volumes:
       - shard1-data:/data/db
@@ -56,7 +56,7 @@ services:
     ports:
       - "27019:27019"
     networks:
-      app-network:
+      intranet-mongo:
         ipv4_address: 173.17.0.8
     volumes:
       - shard2-data:/data/db
@@ -82,7 +82,7 @@ services:
       - "27020:27020"
     networks:
       intranet:
-      app-network:
+      intranet-mongo:
         ipv4_address: 173.17.0.7
     command:
       [
@@ -116,7 +116,7 @@ services:
 
 networks:
   intranet:
-  app-network:
+  intranet-mongo:
     driver: bridge
     ipam:
       driver: default
