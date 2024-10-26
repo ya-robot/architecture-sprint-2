@@ -3,7 +3,7 @@
 ###
 # Инициализируем сервер конфигурации
 ###
-docker compose -f mongodb-sharding/mongodb-sharding.yaml exec -T configSrv mongosh --port 27017 <<EOF
+docker compose -f mongo-sharding/compose.yaml exec -T configSrv mongosh --port 27017 <<EOF
 rs.initiate(
   {
     _id : "config_server",
@@ -17,7 +17,7 @@ EOF
 ###
 # Инициализируем шарды
 ###
-docker compose -f mongodb-sharding/mongodb-sharding.yaml exec -T shard1 mongosh --port 27018 <<EOF
+docker compose -f mongo-sharding/compose.yaml exec -T shard1 mongosh --port 27018 <<EOF
 rs.initiate(
     {
       _id : "shard1",
@@ -28,7 +28,7 @@ rs.initiate(
     }
 )
 EOF
-docker compose -f mongodb-sharding/mongodb-sharding.yaml exec -T shard2 mongosh --port 27019 <<EOF
+docker compose -f mongo-sharding/compose.yaml exec -T shard2 mongosh --port 27019 <<EOF
 rs.initiate(
     {
       _id : "shard2",
@@ -42,7 +42,7 @@ EOF
 ###
 # Инициализируем роутер
 ###
-docker compose -f mongodb-sharding/mongodb-sharding.yaml exec -T mongos_router mongosh --port 27020 <<EOF
+docker compose -f mongo-sharding/compose.yaml exec -T mongos_router mongosh --port 27020 <<EOF
 sh.addShard( "shard1/shard1:27018")
 sh.addShard( "shard2/shard2:27019")
 sh.enableSharding("somedb")
@@ -54,11 +54,11 @@ EOF
 ###
 # Проверяем шардирование
 ###
-docker compose -f mongodb-sharding/mongodb-sharding.yaml exec -T shard1 mongosh --port 27018 <<EOF
+docker compose -f mongo-sharding/compose.yaml exec -T shard1 mongosh --port 27018 <<EOF
 use somedb
 db.helloDoc.countDocuments()
 EOF
-docker compose -f mongodb-sharding/mongodb-sharding.yaml exec -T shard2 mongosh --port 27019 <<EOF
+docker compose -f mongo-sharding/compose.yaml exec -T shard2 mongosh --port 27019 <<EOF
 use somedb
 db.helloDoc.countDocuments()
 EOF
