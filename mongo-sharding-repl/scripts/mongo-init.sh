@@ -3,7 +3,7 @@
 ###
 # Инициализируем сервер конфигурации
 ###
-docker compose -f mongodb-sharding-repl/mongodb-sharding-repl.yaml exec -T configSrv mongosh --port 27017 <<EOF
+docker compose -f mongo-sharding-repl/compose.yaml exec -T configSrv mongosh --port 27017 <<EOF
 rs.initiate(
   {
     _id : "config_server",
@@ -17,7 +17,7 @@ EOF
 ###
 # Инициализируем шарды
 ###
-docker compose -f mongodb-sharding-repl/mongodb-sharding-repl.yaml exec -T shard1-1 mongosh --port 27018 <<EOF
+docker compose -f mongo-sharding-repl/compose.yaml exec -T shard1-1 mongosh --port 27018 <<EOF
 rs.initiate(
     {
       _id : "shard1",
@@ -28,7 +28,7 @@ rs.initiate(
     }
 )
 EOF
-docker compose -f mongodb-sharding-repl/mongodb-sharding-repl.yaml exec -T shard2-1 mongosh --port 27020 <<EOF
+docker compose -f mongo-sharding-repl/compose.yaml exec -T shard2-1 mongosh --port 27020 <<EOF
 rs.initiate(
     {
       _id : "shard2",
@@ -42,7 +42,7 @@ EOF
 ###
 # Инициализируем роутер
 ###
-docker compose -f mongodb-sharding-repl/mongodb-sharding-repl.yaml exec -T mongos_router mongosh --port 27022 <<EOF
+docker compose -f mongo-sharding-repl/compose.yaml exec -T mongos_router mongosh --port 27022 <<EOF
 sh.addShard( "shard1/shard1-1:27018")
 sh.addShard( "shard2/shard2-1:27020")
 sh.enableSharding("somedb")
@@ -54,19 +54,19 @@ EOF
 ###
 # Проверяем шардирование и репликацию
 ###
-docker compose -f mongodb-sharding-repl/mongodb-sharding-repl.yaml exec -T shard1-1 mongosh --port 27018 <<EOF
+docker compose -f mongo-sharding-repl/compose.yaml exec -T shard1-1 mongosh --port 27018 <<EOF
 use somedb
 db.helloDoc.countDocuments()
 EOF
-docker compose -f mongodb-sharding-repl/mongodb-sharding-repl.yaml exec -T shard1-2 mongosh --port 27019 <<EOF
+docker compose -f mongo-sharding-repl/compose.yaml exec -T shard1-2 mongosh --port 27019 <<EOF
 use somedb
 db.helloDoc.countDocuments()
 EOF
-docker compose -f mongodb-sharding-repl/mongodb-sharding-repl.yaml exec -T shard2-1 mongosh --port 27020 <<EOF
+docker compose -f mongo-sharding-repl/compose.yaml exec -T shard2-1 mongosh --port 27020 <<EOF
 use somedb
 db.helloDoc.countDocuments()
 EOF
-docker compose -f mongodb-sharding-repl/mongodb-sharding-repl.yaml exec -T shard2-2 mongosh --port 27021 <<EOF
+docker compose -f mongo-sharding-repl/compose.yaml exec -T shard2-2 mongosh --port 27021 <<EOF
 use somedb
 db.helloDoc.countDocuments()
 EOF

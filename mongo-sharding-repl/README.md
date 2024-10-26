@@ -5,7 +5,7 @@
 From root directory run:
 
 ```bash
-docker compose -f ./mongodb-sharding-repl/mongodb-sharding-repl.yaml up -d
+docker compose -f mongo-sharding-repl/compose.yaml up -d
 ```
 
 Run init script that setups:
@@ -21,7 +21,7 @@ Run init script that setups:
 - checks documents amount on shard2-2
 
 ```bash
-./mongodb-sharding-repl/scripts/mongodb-sharding-repl-init.sh
+./mongo-sharding-repl/scripts/mongo-init.sh
 ```
 
 ## FastAPI
